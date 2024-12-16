@@ -1,4 +1,4 @@
-name: Vote App Pipeline
+name: Result App Pipeline
 
 on:
   push:
