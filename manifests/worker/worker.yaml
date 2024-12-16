@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-app
+  namespace: production
+  annotations:
+    pod.kubernetes.io/lifetime: 2m
+  labels:
+    app: worker-app
+spec:
+  selector:
+    matchLabels:
+      app: worker-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      namespace: production
+      labels:
+        app: worker-app
+    spec:
+      containers:
+      - name: worker-app
+        image: santiagososs/worker-app:latest
+        env:
+            - name: PORT
+              value: "80"
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "10m"
+          limits:
+            memory: "600Mi"
+            cpu: "80m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: worker-app
+  name: worker-app
+  namespace: production
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: worker-app
