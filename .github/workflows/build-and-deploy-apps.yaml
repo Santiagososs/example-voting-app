@@ -8,7 +8,7 @@ on:
       - 'result/**'
       - 'vote/**'
       - 'worker/**'
-      - '.github/workflows/build-and-deploy.yaml'
+      - '.github/workflows/build-and-deploy-apps.yaml'
 
 jobs:
   build-and-push-result:
@@ -94,4 +94,4 @@ jobs:
         run: az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }}
 
       - name: Apply Manifests
-        run: kubectl apply -f manifests/ -n production
+        run: kubectl apply -f manifests/*/*.yaml -n production
