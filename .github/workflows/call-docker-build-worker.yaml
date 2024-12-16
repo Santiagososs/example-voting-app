@@ -1,4 +1,4 @@
-name: Build Worker
+name: Build Worker App
 
 on:
   push:
