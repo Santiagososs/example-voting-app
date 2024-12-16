@@ -1,4 +1,4 @@
-name: Build and Push Vote Docker Image
+name: Vote App Pipeline
 
 on:
   push:
