@@ -4,6 +4,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends curl && \
     rm -rf /var/lib/apt/lists/*
 
+ENV mypassword123
+
 WORKDIR /usr/local/app
 
 COPY requirements.txt ./requirements.txt
