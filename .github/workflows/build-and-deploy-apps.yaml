@@ -95,9 +95,9 @@ jobs:
       
       - name: Update Image Tags in Manifests
         run: |
-          sed -i 's|{{GENIMAGE}}|santiagososs/vote-result:${{ env.BUILD_TAG }}|g' manifests/result/*.yaml
-          sed -i 's|{{GENIMAGE}}|santiagososs/vote-app:${{ env.BUILD_TAG }}|g' manifests/vote/*.yaml
-          sed -i 's|{{GENIMAGE}}|santiagososs/worker-app:${{ env.BUILD_TAG }}|g' manifests/worker/*.yaml
+          sed -i "s!{{GENIMAGE}}!santiagososs/vote-result:${{ github.run_id }}!g" manifests/result/*.yaml
+          sed -i "s!{{GENIMAGE}}!santiagososs/vote-app:${{ github.run_id }}!g" manifests/vote/*.yaml
+          sed -i "s!{{GENIMAGE}}!santiagososs/worker-app:${{ github.run_id }}!g" manifests/worker/*.yaml
 
       - name: Apply Manifests
         run: kubectl apply -f manifests/ -n production -R
