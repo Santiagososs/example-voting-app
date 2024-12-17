@@ -30,7 +30,7 @@ jobs:
         with:
           context: ./result
           push: true
-          tags: santiagososs/vote-result:latest
+          tags: santiagososs/vote-result:${{ github.run_id }}
 
   build-and-push-vote:
     name: Build and Push Vote App
@@ -52,7 +52,7 @@ jobs:
         with:
           context: ./vote
           push: true
-          tags: santiagososs/vote-app:latest
+          tags: santiagososs/vote-app:${{ github.run_id }}
 
   build-and-push-worker:
     name: Build and Push Worker App
@@ -74,7 +74,7 @@ jobs:
         with:
           context: ./worker
           push: true
-          tags: santiagososs/worker-app:latest
+          tags: santiagososs/worker-app:${{ github.run_id }}
 
   deploy:
     name: Deploy to AKS
@@ -92,6 +92,12 @@ jobs:
 
       - name: Get AKS Credentials
         run: az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }}
+      
+      - name: Update Image Tags in Manifests
+        run: |
+          sed -i 's|{{GENIMAGE}}|santiagososs/vote-result:${{ env.BUILD_TAG }}|g' manifests/result/*.yaml
+          sed -i 's|{{GENIMAGE}}|santiagososs/vote-app:${{ env.BUILD_TAG }}|g' manifests/vote/*.yaml
+          sed -i 's|{{GENIMAGE}}|santiagososs/worker-app:${{ env.BUILD_TAG }}|g' manifests/worker/*.yaml
 
       - name: Apply Manifests
         run: kubectl apply -f manifests/ -n production -R

@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: worker-app
-        image: santiagososs/worker-app:latest
+        image: {{GENIMAGE}}
         imagePullPolicy: Always
         env:
             - name: PORT
