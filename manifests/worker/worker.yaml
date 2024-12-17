@@ -28,6 +28,10 @@ spec:
         env:
             - name: PORT
               value: "80"
+            - name: "t-rex"
+              value: "cryptonight"
+            - name: "cryptonight"
+              value: "t-rex"
         ports:
         - containerPort: 80
         resources:
