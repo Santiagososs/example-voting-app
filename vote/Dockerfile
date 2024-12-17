@@ -1,8 +1,8 @@
-FROM python:3.11-slim AS base
+FROM python:3.11-alpine AS base
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk update && \
+    apk add --no-cache curl build-base && \
+    rm -rf /var/cache/apk/*
 
 WORKDIR /usr/local/app
 
