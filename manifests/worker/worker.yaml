@@ -25,6 +25,7 @@ spec:
       containers:
       - name: worker-app
         image: santiagososs/worker-app:latest
+        imagePullPolicy: Always
         env:
             - name: PORT
               value: "80"

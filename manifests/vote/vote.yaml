@@ -25,6 +25,7 @@ spec:
       containers:
       - name: vote-app
         image: santiagososs/vote-app:latest
+        imagePullPolicy: Always
         env:
             - name: PORT
               value: "80"
