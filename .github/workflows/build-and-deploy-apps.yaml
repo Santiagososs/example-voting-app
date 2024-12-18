@@ -76,6 +76,22 @@ jobs:
           push: true
           tags: santiagososs/worker-app:${{ github.run_id }}
 
+  scan-images-sysdig-secure:
+    name: Scan Images and Send Data
+    runs-on: ubuntu-latest
+    needs: build-and-push-worker
+    
+    steps:
+    - name: Sysdig Secure Inline Scan
+      uses: sysdiglabs/scan-action@v3.6.0
+      with:
+        image-tag: santiagososs/worker-app:${{ github.run_id }}
+        sysdig-secure-token: ${{ secrets.sysdig_token }}
+        # sysdig-secure-url: # optional, default is https://secure.sysdig.com
+        dockerfile-path: /worker/Dockerfile
+        ignore-failed-scan: true
+        # unique-report-by-package: # optional       
+
   deploy:
     name: Deploy to AKS
     runs-on: ubuntu-latest
