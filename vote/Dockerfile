@@ -7,7 +7,8 @@ RUN apk update && \
 WORKDIR /usr/local/app
 
 COPY requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip setuptools>=70.0.0 && \
+    pip install --no-cache-dir -r requirements.txt
 
 FROM base AS dev
 RUN pip install watchdog
