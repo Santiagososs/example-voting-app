@@ -87,7 +87,7 @@ jobs:
       with:
         image-tag: santiagososs/worker-app:${{ github.run_id }}
         sysdig-secure-token: ${{ secrets.sysdig_token }}
-        # sysdig-secure-url: # optional, default is https://secure.sysdig.com
+        sysdig-secure-url: ${{secrets.sysdig_endpoint}}
         ignore-failed-scan: true
         # unique-report-by-package: # optional       
 
