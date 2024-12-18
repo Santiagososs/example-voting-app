@@ -6,6 +6,7 @@ RUN apk update && \
 
 WORKDIR /usr/local/app
 
+RUN rm package-lock.json
 RUN npm install -g nodemon
 
 COPY package*.json ./
