@@ -82,14 +82,20 @@ jobs:
     needs: build-and-push-worker
     
     steps:
-    - name: Sysdig Secure Inline Scan
+    - name: Sysdig Secure Inline Scan Legacy
       uses: sysdiglabs/scan-action@v3.6.0
       with:
         image-tag: santiagososs/worker-app:${{ github.run_id }}
         sysdig-secure-token: ${{ secrets.sysdig_token }}
         sysdig-secure-url: ${{secrets.sysdig_endpoint}}
         ignore-failed-scan: true
-        # unique-report-by-package: # optional       
+        
+    - name: Sysdig Secure Inline Scan New
+      run: |
+        curl -LO "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)/linux/amd64/sysdig-cli-scanner"
+        chmod +x ./sysdig-cli-scanner
+        SECURE_API_TOKEN=${{ secrets.sysdig_token }} ./sysdig-cli-scanner --apiurl ${{secrets.sysdig_endpoint}} santiagososs/vote-app:${{ github.run_id }}
+    
 
   deploy:
     name: Deploy to AKS
