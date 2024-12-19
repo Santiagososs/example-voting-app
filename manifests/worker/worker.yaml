@@ -25,6 +25,15 @@ spec:
       containers:
       - name: worker-app
         image: {{GENIMAGE}}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          runAsUser: 1000 
+          runAsGroup: 1000 
+          readOnlyRootFilesystem: true 
+          runAsNonRoot: true
         imagePullPolicy: Always
         env:
             - name: PORT
@@ -38,21 +47,3 @@ spec:
           limits:
             memory: "600Mi"
             cpu: "80m"
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: worker-app
-  name: worker-app
-  namespace: production
-spec:
-  type: ClusterIP
-  ports:
-  - protocol: TCP
-    name: http
-    port: 80
-    targetPort: 80
-  selector:
-    app: worker-app
