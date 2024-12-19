@@ -24,7 +24,8 @@ spec:
     spec:
       containers:
       - name: vote-app
-        image: santiagososs/vote-app:latest
+        image: {{GENIMAGE}}
+        imagePullPolicy: Always
         env:
             - name: PORT
               value: "80"
@@ -63,6 +64,7 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
   name: vote-ingress
   namespace: production
 spec:
