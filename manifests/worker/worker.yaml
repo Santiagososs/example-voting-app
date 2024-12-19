@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: worker-app
-        image: santiagososs/worker-app:latest
+        image: {{GENIMAGE}}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -34,13 +34,10 @@ spec:
           runAsGroup: 1000 
           readOnlyRootFilesystem: true 
           runAsNonRoot: true
+        imagePullPolicy: Always
         env:
             - name: PORT
               value: "80"
-            - name: "t-rex"
-              value: "cryptonight"
-            - name: "cryptonight"
-              value: "t-rex"
         ports:
         - containerPort: 80
         resources:
