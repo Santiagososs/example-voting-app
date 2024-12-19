@@ -25,6 +25,14 @@ spec:
       containers:
       - name: worker-app
         image: santiagososs/worker-app:latest
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          runAsUser: 1000 
+          runAsGroup: 1000 
+          runAsNonRoot: true
         env:
             - name: PORT
               value: "80"
