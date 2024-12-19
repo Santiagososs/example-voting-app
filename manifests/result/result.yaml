@@ -25,6 +25,15 @@ spec:
       containers:
       - name: result-app
         image: {{GENIMAGE}}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          runAsUser: 1000 
+          runAsGroup: 1000 
+          readOnlyRootFilesystem: true 
+          runAsNonRoot: true
         imagePullPolicy: Always
         env:
             - name: PORT
@@ -39,46 +48,4 @@ spec:
             memory: "600Mi"
             cpu: "80m"
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: result-app
-  name: result-app
-  namespace: production
-spec:
-  type: ClusterIP
-  ports:
-  - protocol: TCP
-    name: http
-    port: 80
-    targetPort: 80
-  selector:
-    app: result-app
 
----
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-  name: result-ingress
-  namespace: production
-spec:
-  tls:
-  - hosts:
-    - result.henrysantiago.com
-  rules:
-  - host: result.henrysantiago.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: result-app
-            port:
-              number: 80
