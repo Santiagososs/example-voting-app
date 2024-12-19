@@ -1,4 +1,4 @@
-name: Build and Deploy All Apps
+name: Build, Scan and Deploy All Apps
 
 on:
   push:
