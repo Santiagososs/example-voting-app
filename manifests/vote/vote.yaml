@@ -25,15 +25,6 @@ spec:
       containers:
       - name: vote-app
         image: {{GENIMAGE}}
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-          runAsUser: 1000 
-          runAsGroup: 1000 
-          readOnlyRootFilesystem: true 
-          runAsNonRoot: true
         imagePullPolicy: Always
         env:
             - name: PORT
