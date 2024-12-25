@@ -120,7 +120,7 @@ jobs:
       
       - name: Update Image Tags in Manifests
         run: |
-          sed -i "s!{{GENIMAGE}}!santiagososs/vote-result:${{ github.run_id }}!g" manifests/result/*.yaml
+          sed -i "s!{{GENIMAGE}}!santiagososs/vote-result:${{ github.run_id }}!g" manifests/result/*.yaml 
           sed -i "s!{{GENIMAGE}}!santiagososs/vote-app:${{ github.run_id }}!g" manifests/vote/*.yaml
           sed -i "s!{{GENIMAGE}}!santiagososs/worker-app:${{ github.run_id }}!g" manifests/worker/*.yaml
 
