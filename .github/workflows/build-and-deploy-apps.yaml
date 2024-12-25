@@ -14,7 +14,7 @@ jobs:
   build-and-push-result:
     name: Build and Push Result App
     runs-on: ubuntu-latest
-
+ 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
