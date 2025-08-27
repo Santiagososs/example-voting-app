@@ -9,6 +9,7 @@ on:
       - 'vote/**'
       - 'worker/**'
       - '.github/workflows/build-and-deploy-apps.yaml'
+  workflow_dispatch:
 
 jobs:
   build-and-push-result:
@@ -101,28 +102,28 @@ jobs:
         chmod +x ./sysdig-cli-scanner
         SECURE_API_TOKEN=${{ secrets.sysdig_token }} ./sysdig-cli-scanner --apiurl ${{secrets.sysdig_endpoint}} santiagososs/worker-app:${{ github.run_id }}
 
-  deploy:
-    name: Deploy to AKS
-    runs-on: ubuntu-latest
-    needs: scan-images-sysdig-secure
- 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+  # deploy:
+#     name: Deploy to AKS
+#     runs-on: ubuntu-latest
+#     needs: scan-images-sysdig-secure
 
-      - name: Set up Azure CLI
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v3
 
-      - name: Get AKS Credentials
-        run: az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }}
-      
-      - name: Update Image Tags in Manifests
-        run: |
-          sed -i "s!{{GENIMAGE}}!santiagososs/vote-result:${{ github.run_id }}!g" manifests/result/*.yaml 
-          sed -i "s!{{GENIMAGE}}!santiagososs/vote-app:${{ github.run_id }}!g" manifests/vote/*.yaml
-          sed -i "s!{{GENIMAGE}}!santiagososs/worker-app:${{ github.run_id }}!g" manifests/worker/*.yaml
+#       - name: Set up Azure CLI
+#         uses: azure/login@v1
+#         with:
+#           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Apply Manifests
-        run: kubectl apply -f manifests/ -n production -R
+#       - name: Get AKS Credentials
+#         run: az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }}
+
+#       - name: Update Image Tags in Manifests
+#         run: |
+#           sed -i "s!{{GENIMAGE}}!santiagososs/vote-result:${{ github.run_id }}!g" manifests/result/*.yaml
+#           sed -i "s!{{GENIMAGE}}!santiagososs/vote-app:${{ github.run_id }}!g" manifests/vote/*.yaml
+#           sed -i "s!{{GENIMAGE}}!santiagososs/worker-app:${{ github.run_id }}!g" manifests/worker/*.yaml
+
+#       - name: Apply Manifests
+#         run: kubectl apply -f manifests/ -n production -R
