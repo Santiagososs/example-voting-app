@@ -21,7 +21,7 @@ spec:
   mode: all
   selector:
     labelSelectors:
-      'app': 'vote-app',
+      'app': 'vote-app'
       'app': 'worker-app'
   stressors:
     memory:
