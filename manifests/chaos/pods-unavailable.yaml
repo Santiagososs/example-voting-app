@@ -8,7 +8,6 @@ spec:
   selector:
     labelSelectors:
       'app': 'vote-app'
-      'app': 'worker-app'
   stressors:
     memory:
       workers: 4
