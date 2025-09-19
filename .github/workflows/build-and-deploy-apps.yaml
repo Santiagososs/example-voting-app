@@ -102,28 +102,25 @@ jobs:
         chmod +x ./sysdig-cli-scanner
         SECURE_API_TOKEN=${{ secrets.sysdig_token }} ./sysdig-cli-scanner --apiurl ${{secrets.sysdig_endpoint}} santiagososs/worker-app:${{ github.run_id }}
 
-  # deploy:
-#     name: Deploy to AKS
-#     runs-on: ubuntu-latest
-#     needs: scan-images-sysdig-secure
+  deploy:
+     name: Deploy to AKS
+     runs-on: ubuntu-latest
+     needs: scan-images-sysdig-secure
 
-#     steps:
-#       - name: Checkout Code
-#         uses: actions/checkout@v3
+     steps:
+       - name: Checkout Code
+         uses: actions/checkout@v3
 
-#       - name: Set up Azure CLI
-#         uses: azure/login@v1
-#         with:
-#           creds: ${{ secrets.AZURE_CREDENTIALS }}
+       - name: Update Image Tags in Manifests
+         run: |
+           sed -i "s!{{GENIMAGE}}!santiagososs/vote-result:${{ github.run_id }}!g" manifests/result/*.yaml
+           sed -i "s!{{GENIMAGE}}!santiagososs/vote-app:${{ github.run_id }}!g" manifests/vote/*.yaml
+           sed -i "s!{{GENIMAGE}}!santiagososs/worker-app:${{ github.run_id }}!g" manifests/worker/*.yaml
 
-#       - name: Get AKS Credentials
-#         run: az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }}
-
-#       - name: Update Image Tags in Manifests
-#         run: |
-#           sed -i "s!{{GENIMAGE}}!santiagososs/vote-result:${{ github.run_id }}!g" manifests/result/*.yaml
-#           sed -i "s!{{GENIMAGE}}!santiagososs/vote-app:${{ github.run_id }}!g" manifests/vote/*.yaml
-#           sed -i "s!{{GENIMAGE}}!santiagososs/worker-app:${{ github.run_id }}!g" manifests/worker/*.yaml
-
-#       - name: Apply Manifests
-#         run: kubectl apply -f manifests/ -n production -R
+       - name: Commit and push changes to GitOps repo
+         run: |
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add manifests/
+            git commit -m "chore(gitops): update image tag for deployment"
+            git push
