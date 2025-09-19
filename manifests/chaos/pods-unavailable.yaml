@@ -1,18 +1,3 @@
-
-apiVersion: chaos-mesh.org/v1alpha1
-kind: PodChaos
-metadata:
-  name: pod-failure-example
-  namespace: production
-spec:
-  action: pod-failure
-  mode: one
-  duration: '220s'
-  selector:
-    labelSelectors:
-      'app': 'vote-app'
----
-
 apiVersion: chaos-mesh.org/v1alpha1
 kind: StressChaos
 metadata:
