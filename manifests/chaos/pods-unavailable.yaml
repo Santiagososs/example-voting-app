@@ -11,3 +11,20 @@ spec:
   selector:
     labelSelectors:
       'app': 'vote-app'
+
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: memory-stress-example
+  namespace: production
+spec:
+  mode: all
+  selector:
+    labelSelectors:
+      'app': 'vote-app',
+      'app': 'worker-app'
+  stressors:
+    memory:
+      workers: 4
+      size: '570MB'
+  duration: "120s"
