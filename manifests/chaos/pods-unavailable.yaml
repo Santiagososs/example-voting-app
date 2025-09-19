@@ -7,7 +7,7 @@ metadata:
 spec:
   action: pod-failure
   mode: one
-  duration: '30s'
+  duration: '220s'
   selector:
     labelSelectors:
       'app': 'vote-app'
