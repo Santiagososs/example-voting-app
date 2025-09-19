@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: vote-app
-        image: {{GENIMAGE}}
+        image: santiagososs/vote-app:17862365005
         imagePullPolicy: Always
         env:
             - name: PORT
