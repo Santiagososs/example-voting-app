@@ -14,6 +14,10 @@ RUN npm install && \
     npm cache clean --force && \
     mv /usr/local/app/node_modules /node_modules
 
+RUN apk update && \
+    apk upgrade && \
+    rm -rf /var/cache/apk/*
+
 COPY . .
 
 ENV PORT=80
