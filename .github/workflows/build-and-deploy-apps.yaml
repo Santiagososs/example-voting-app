@@ -84,36 +84,35 @@ jobs:
     
     steps:  
         
-    - name: Scanning Vote App Image
-      run: |
-        curl -LO "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)/linux/amd64/sysdig-cli-scanner"
-        chmod +x ./sysdig-cli-scanner
-        SECURE_API_TOKEN=${{ secrets.sysdig_token }} ./sysdig-cli-scanner --apiurl ${{secrets.sysdig_endpoint}} --json-scan-result report.json santiagososs/vote-app:${{ github.run_id }}
- 
-    - name: Scanning Result App Image
-      run: |
-        curl -LO "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)/linux/amd64/sysdig-cli-scanner"
-        chmod +x ./sysdig-cli-scanner
-        SECURE_API_TOKEN=${{ secrets.sysdig_token }} ./sysdig-cli-scanner --apiurl ${{secrets.sysdig_endpoint}} santiagososs/vote-result:${{ github.run_id }}
-    
-    - name: Scanning Worker App Image
-      run: |
-        curl -LO "https://download.sysdig.com/scanning/bin/sysdig-cli-scanner/$(curl -L -s https://download.sysdig.com/scanning/sysdig-cli-scanner/latest_version.txt)/linux/amd64/sysdig-cli-scanner"
-        chmod +x ./sysdig-cli-scanner
-        SECURE_API_TOKEN=${{ secrets.sysdig_token }} ./sysdig-cli-scanner --apiurl ${{secrets.sysdig_endpoint}} santiagososs/worker-app:${{ github.run_id }}
-    
-    - name: Checkout repository code 
-      uses: actions/checkout@v4 
-    
-    - name: Generate SARIF report
-      run: |
-        python3 ./sysdig-to-sarif.py report.json > results.sarif
-
-    - name: Upload scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v3
-      if: always()
+    - name: Scan Vote App Image
+      id: scan-vote
+      uses: sysdiglabs/scan-action@v5
       with:
-        sarif_file: results.sarif
+        image-tag: santiagososs/vote-app:${{ github.run_id }}
+        sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+        sysdig-secure-url: ${{ secrets.sysdig_endpoint }}
+      
+    - name: Scan Result App Image
+      id: scan-result
+      uses: sysdiglabs/scan-action@v5
+      with:
+        image-tag: santiagososs/vote-result:${{ github.run_id }}
+        sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+        sysdig-secure-url: ${{ secrets.sysdig_endpoint }}
+
+    - name: Scan Worker App Image
+      id: scan-worker
+      uses: sysdiglabs/scan-action@v5
+      with:
+        image-tag: santiagososs/worker-app:${{ github.run_id }}
+        sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+        sysdig-secure-url: ${{ secrets.sysdig_endpoint }}
+
+    - name: Upload SARIF file
+      if: success() || failure()
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ github.workspace }}/sarif.json
 
   deploy:
      name: Deploy to AKS
