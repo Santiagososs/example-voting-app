@@ -88,7 +88,7 @@ jobs:
       id: scan-vote
       uses: sysdiglabs/scan-action@v5
       with:
-        cli-scanner-version: "1.13.2"
+        cli-scanner-version: "1.23.0"
         image-tag: santiagososs/vote-app:${{ github.run_id }}
         sysdig-secure-token: ${{ secrets.SYSDIG_TOKEN }}
         sysdig-secure-url: ${{ secrets.SYSDIG_ENDPOINT }}
@@ -97,7 +97,7 @@ jobs:
       id: scan-result
       uses: sysdiglabs/scan-action@v5
       with:
-        cli-scanner-version: "1.13.2"
+        cli-scanner-version: "1.23.0"
         image-tag: santiagososs/vote-result:${{ github.run_id }}
         sysdig-secure-token: ${{ secrets.SYSDIG_TOKEN }}
         sysdig-secure-url: ${{ secrets.SYSDIG_ENDPOINT }}
@@ -106,7 +106,7 @@ jobs:
       id: scan-worker
       uses: sysdiglabs/scan-action@v5
       with:
-        cli-scanner-version: "1.13.2"
+        cli-scanner-version: "1.23.0"
         image-tag: santiagososs/worker-app:${{ github.run_id }}
         sysdig-secure-token: ${{ secrets.SYSDIG_TOKEN }}
         sysdig-secure-url: ${{ secrets.SYSDIG_ENDPOINT }}
