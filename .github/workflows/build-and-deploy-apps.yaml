@@ -102,6 +102,9 @@ jobs:
         chmod +x ./sysdig-cli-scanner
         SECURE_API_TOKEN=${{ secrets.sysdig_token }} ./sysdig-cli-scanner --apiurl ${{secrets.sysdig_endpoint}} santiagososs/worker-app:${{ github.run_id }}
     
+    - name: Checkout repository code 
+      uses: actions/checkout@v4 
+    
     - name: Generate SARIF report
       run: |
         python3 ./sysdig-to-sarif.py report.json > results.sarif
