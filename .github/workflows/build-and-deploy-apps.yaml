@@ -89,24 +89,24 @@ jobs:
       uses: sysdiglabs/scan-action@v5
       with:
         image-tag: santiagososs/vote-app:${{ github.run_id }}
-        sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-        sysdig-secure-url: ${{ secrets.sysdig_endpoint }}
+        sysdig-secure-token: ${{ secrets.SYSDIG_TOKEN }}
+        sysdig-secure-url: ${{ secrets.SYSDIG_ENDPOINT }}
       
     - name: Scan Result App Image
       id: scan-result
       uses: sysdiglabs/scan-action@v5
       with:
         image-tag: santiagososs/vote-result:${{ github.run_id }}
-        sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-        sysdig-secure-url: ${{ secrets.sysdig_endpoint }}
+        sysdig-secure-token: ${{ secrets.SYSDIG_TOKEN }}
+        sysdig-secure-url: ${{ secrets.SYSDIG_ENDPOINT }}
 
     - name: Scan Worker App Image
       id: scan-worker
       uses: sysdiglabs/scan-action@v5
       with:
         image-tag: santiagososs/worker-app:${{ github.run_id }}
-        sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-        sysdig-secure-url: ${{ secrets.sysdig_endpoint }}
+        sysdig-secure-token: ${{ secrets.SYSDIG_TOKEN }}
+        sysdig-secure-url: ${{ secrets.SYSDIG_ENDPOINT }}
 
     - name: Upload SARIF file
       if: success() || failure()
